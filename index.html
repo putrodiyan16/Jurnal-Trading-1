@@ -48,17 +48,9 @@
             overflow: hidden;
         }
 
-        .logo-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        .logo-placeholder img { width: 100%; height: 100%; object-fit: contain; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
 
         .card {
             background: var(--bg-card);
@@ -91,3 +83,232 @@
 
         .tab-container { display: flex; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
         .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 7px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .tab-btn.active { background: var(--primary-red); color: white; }
+        .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .tab-content.active { display: block; }
+
+        .btn-save {
+            background: linear-gradient(to right, var(--primary-red), var(--accent-red));
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
+        .btn-save:disabled { background: #444; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .chart-container { position: relative; height: 300px; width: 100%; }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .card { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-placeholder" onclick="document.getElementById('logoInput').click()">
+        <span id="logoText">GANTI LOGO</span>
+        <img id="logoImg" style="display:none;">
+    </div>
+    <input type="file" id="logoInput" style="display:none" accept="image/*" onchange="loadLogo(event)">
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Trade Performance Analysis</p>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Performance Analytics</h2>
+        <div class="chart-container">
+            <canvas id="mainChart"></canvas>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>New Entry</h2>
+        <div class="input-grid">
+            <div class="form-group">
+                <label>Instrument</label>
+                <select id="mainPair">
+                    <option value="XAUUSD">XAUUSD (Emas)</option>
+                    <option value="XAGUSD">XAGUSD (Perak)</option>
+                    <option value="NAS100">NAS100 (Nasdaq)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="openTab(event, 'H4')">H4</button>
+            <button class="tab-btn" onclick="openTab(event, 'H1')">H1</button>
+            <button class="tab-btn" onclick="openTab(event, 'M30')">M30</button>
+            <button class="tab-btn" onclick="openTab(event, 'M15')">M15</button>
+        </div>
+
+        <div id="H4" class="tab-content active">
+            <div class="input-grid">
+                <select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select>
+                <select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">RSI: Overbought</option><option value="Oversold">RSI: Oversold</option></select>
+                <input type="text" class="candle" placeholder="Candle Pattern">
+            </div>
+            <div class="input-grid">
+                <input type="text" class="openPrice" placeholder="Price Open">
+                <input type="text" class="closePrice" placeholder="Price Close">
+            </div>
+        </div>
+
+        <div id="H1" class="tab-content">
+            <div class="input-grid">
+                <select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select>
+                <select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">RSI: Overbought</option><option value="Oversold">RSI: Oversold</option></select>
+                <input type="text" class="candle" placeholder="Candle Pattern">
+            </div>
+            <div class="input-grid">
+                <input type="text" class="openPrice" placeholder="Price Open">
+                <input type="text" class="closePrice" placeholder="Price Close">
+            </div>
+        </div>
+
+        <div id="M30" class="tab-content">
+            <div class="input-grid">
+                <select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select>
+                <select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">RSI: Overbought</option><option value="Oversold">RSI: Oversold</option></select>
+                <input type="text" class="candle" placeholder="Candle Pattern">
+            </div>
+            <div class="input-grid">
+                <input type="text" class="openPrice" placeholder="Price Open">
+                <input type="text" class="closePrice" placeholder="Price Close">
+            </div>
+        </div>
+
+        <div id="M15" class="tab-content">
+            <div class="input-grid">
+                <select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select>
+                <select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">RSI: Overbought</option><option value="Oversold">RSI: Oversold</option></select>
+                <input type="text" class="candle" placeholder="Candle Pattern">
+            </div>
+            <div class="input-grid">
+                <input type="text" class="openPrice" placeholder="Price Open">
+                <input type="text" class="closePrice" placeholder="Price Close">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+            <label>Notes & Evaluation</label>
+            <textarea id="mainNotes" rows="4" placeholder="Tuliskan alasan entry..."></textarea>
+        </div>
+
+        <button id="saveBtn" class="btn-save">Log Execution</button>
+    </div>
+</div>
+
+<script>
+    // Konfigurasi Google Sheets
+    const scriptURL = 'GANTI_DENGAN_URL_WEB_APP_KAMU';
+
+    function openTab(evt, tfName) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+        document.getElementById(tfName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    function loadLogo(event) {
+        const output = document.getElementById('logoImg');
+        const text = document.getElementById('logoText');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.style.display = 'block';
+        text.style.display = 'none';
+    }
+
+    // Fungsi Simpan Data
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        const btn = this;
+        const activeTab = document.querySelector('.tab-content.active');
+        
+        const journalData = {
+            pair: document.getElementById('mainPair').value,
+            timeframe: activeTab.id,
+            trend: activeTab.querySelector('.trend').value,
+            rsi: activeTab.querySelector('.rsi').value,
+            candle: activeTab.querySelector('.candle').value,
+            open: activeTab.querySelector('.openPrice').value,
+            close: activeTab.querySelector('.closePrice').value,
+            notes: document.getElementById('mainNotes').value
+        };
+
+        if(scriptURL === 'GANTI_DENGAN_URL_WEB_APP_KAMU') {
+            alert('Error: Kamu belum memasukkan URL Google Apps Script di bagian bawah kode!');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = 'Sending to Sheets...';
+
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors', // Penting untuk Google Apps Script
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(journalData) 
+        })
+        .then(() => {
+            alert('Berhasil! Data telah terkirim ke Google Sheets.');
+            btn.disabled = false;
+            btn.innerText = 'Log Execution';
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            alert('Terjadi kesalahan saat menyimpan data.');
+            btn.disabled = false;
+            btn.innerText = 'Log Execution';
+        });
+    });
+
+    // Chart.js Setup
+    const ctx = document.getElementById('mainChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['W1', 'W2', 'W3', 'W4'],
+            datasets: [{
+                label: 'Equity',
+                data: [1000, 1250, 1100, 1600],
+                borderColor: '#e63946',
+                tension: 0.4,
+                fill: true,
+                backgroundColor: 'rgba(230, 57, 70, 0.1)',
+                pointRadius: 5
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#2d333b' }, ticks: { color: '#94a3b8' } },
+                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+            }
+        }
+    });
+</script>
+</body>
+</html>
