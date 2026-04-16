@@ -3,208 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Journal Pro</title>
+    <title>Trading Journal | Professional Suite</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-red: #cc0000;
-            --dark-red: #8b0000;
-            --bg-dark: #121212;
-            --card-bg: #1e1e1e;
-            --text-white: #e0e0e0;
+            --primary-red: #e63946;
+            --accent-red: #b91c1c;
+            --bg-body: #0f1115;
+            --bg-card: #1a1d23;
+            --text-main: #f1f1f1;
+            --text-muted: #94a3b8;
+            --border-color: #2d333b;
         }
 
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-white);
+            background-color: var(--bg-body);
+            color: var(--text-main);
             margin: 0;
-            padding: 0;
+            padding-bottom: 50px;
+            line-height: 1.6;
         }
 
+        /* Header & Logo */
         header {
-            background-color: var(--dark-red);
-            padding: 20px;
+            background: linear-gradient(135deg, #1a1d23 0%, #0f1115 100%);
+            padding: 30px 20px;
             text-align: center;
-            border-bottom: 3px solid var(--primary-red);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .logo-container img {
-            max-width: 150px;
-            height: auto;
+        .logo-placeholder {
+            width: 120px;
+            height: 50px;
+            background: #2d333b;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 8px;
-            /* Ganti URL di bawah ini dengan logo Anda */
-            content: url('https://via.placeholder.com/150x50/ff0000/ffffff?text=LOGO+ANDA');
+            border: 1px dashed var(--text-muted);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .logo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 15px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            border-left: 5px solid var(--primary-red);
         }
 
-        h2 { color: var(--primary-red); border-bottom: 1px solid #444; padding-bottom: 10px; }
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        h2 { font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; }
+        h2::before { content: ''; width: 4px; height: 20px; background: var(--primary-red); margin-right: 12px; border-radius: 2px; }
+
+        /* Form Styling */
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        
+        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         
         select, input, textarea {
             width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background: #2d2d2d;
+            background: #252930;
+            border: 1px solid var(--border-color);
             color: white;
-            box-sizing: border-box;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-        }
-
-        .timeframe-section {
-            background: #252525;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
-            margin-top: 15px;
-            border: 1px solid #333;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
-        .btn-submit {
-            background-color: var(--primary-red);
-            color: white;
-            padding: 12px 25px;
+        select:focus, input:focus { border-color: var(--primary-red); outline: none; box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2); }
+
+        /* Tabs System */
+        .tab-container { display: flex; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
             border: none;
-            border-radius: 5px;
+            background: none;
+            color: var(--text-muted);
             cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            font-weight: bold;
+            border-radius: 7px;
+            font-weight: 600;
             transition: 0.3s;
         }
+        .tab-btn.active { background: var(--primary-red); color: white; }
+        .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .tab-content.active { display: block; }
 
-        .btn-submit:hover { background-color: #ff0000; }
+        /* Button */
+        .btn-save {
+            background: linear-gradient(to right, var(--primary-red), var(--accent-red));
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
 
-        canvas { background: #1e1e1e; border-radius: 8px; margin-top: 20px; }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
 
-        /* Responsive Mobile */
+        /* Chart Canvas */
+        .chart-container { position: relative; height: 300px; width: 100%; }
+
         @media (max-width: 600px) {
-            .grid-3 { grid-template-columns: 1fr; }
+            .container { padding: 15px; }
+            .card { padding: 18px; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <img src="" alt="Trading Logo">
+    <div class="logo-placeholder" onclick="document.getElementById('logoInput').click()">
+        <span id="logoText">GANTI LOGO</span>
+        <img id="logoImg" style="display:none;">
     </div>
-    <h1>Trading Journal Dashboard</h1>
+    <input type="file" id="logoInput" style="display:none" accept="image/*" onchange="loadLogo(event)">
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Trade Performance Analysis</p>
 </header>
 
 <div class="container">
-    
     <div class="card">
-        <h2>Performa Trading</h2>
-        <canvas id="performanceChart"></canvas>
+        <h2>Performance Analytics</h2>
+        <div class="chart-container">
+            <canvas id="mainChart"></canvas>
+        </div>
     </div>
 
     <div class="card">
-        <h2>Input Trade Baru</h2>
-        <form id="tradingForm">
-            
+        <h2>New Entry</h2>
+        
+        <div class="input-grid">
             <div class="form-group">
-                <label>Pair</label>
-                <select id="pair">
-                    <option value="emas">Emas (XAUUSD)</option>
-                    <option value="perak">Perak (XAGUSD)</option>
-                    <option value="nasdaq">Nasdaq (NAS100)</option>
+                <label>Instrument</label>
+                <select>
+                    <option>XAUUSD (Emas)</option>
+                    <option>XAGUSD (Perak)</option>
+                    <option>NAS100 (Nasdaq)</option>
                 </select>
             </div>
-
-            <div id="timeframe-container">
-                <script>
-                    const tfs = ["H4", "H1", "M30", "M15"];
-                    tfs.forEach(tf => {
-                        document.write(`
-                            <div class="timeframe-section">
-                                <h3>Timeframe ${tf}</h3>
-                                <div class="grid-3">
-                                    <div class="form-group">
-                                        <label>Trend MA</label>
-                                        <select><option>Buy</option><option>Sell</option></select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>RSI</label>
-                                        <select><option>Overbought</option><option>Oversold</option><option>Neutral</option></select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Pola Candle</label>
-                                        <input type="text" placeholder="Contoh: Engulfing">
-                                    </div>
-                                </div>
-                                <div class="grid-3">
-                                    <div class="form-group">
-                                        <label>Harga Open</label>
-                                        <input type="number" step="any">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Harga Close</label>
-                                        <input type="number" step="any">
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    });
-                </script>
+            <div class="form-group">
+                <label>Notes (General)</label>
+                <input type="text" placeholder="Entry context...">
             </div>
+        </div>
 
-            <div class="form-group" style="margin-top: 20px;">
-                <label>Catatan Tambahan</label>
-                <textarea rows="4" placeholder="Alasan entry atau evaluasi..."></textarea>
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="openTab(event, 'H4')">H4</button>
+            <button class="tab-btn" onclick="openTab(event, 'H1')">H1</button>
+            <button class="tab-btn" onclick="openTab(event, 'M30')">M30</button>
+            <button class="tab-btn" onclick="openTab(event, 'M15')">M15</button>
+        </div>
+
+        <div id="H4" class="tab-content active">
+            <div class="input-grid">
+                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
+                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
+                <input type="text" placeholder="Candle Pattern">
             </div>
+            <div class="input-grid">
+                <input type="text" placeholder="Price Open">
+                <input type="text" placeholder="Price Close">
+            </div>
+        </div>
 
-            <button type="button" class="btn-submit" onclick="alert('Data tersimpan! (Simulasi)')">Simpan Jurnal</button>
-        </form>
+        <div id="H1" class="tab-content">
+            <div class="input-grid">
+                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
+                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
+                <input type="text" placeholder="Candle Pattern">
+            </div>
+            <div class="input-grid">
+                <input type="text" placeholder="Price Open">
+                <input type="text" placeholder="Price Close">
+            </div>
+        </div>
+
+        <div id="M30" class="tab-content">
+            <div class="input-grid">
+                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
+                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
+                <input type="text" placeholder="Candle Pattern">
+            </div>
+            <div class="input-grid">
+                <input type="text" placeholder="Price Open">
+                <input type="text" placeholder="Price Close">
+            </div>
+        </div>
+
+        <div id="M15" class="tab-content">
+            <div class="input-grid">
+                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
+                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
+                <input type="text" placeholder="Candle Pattern">
+            </div>
+            <div class="input-grid">
+                <input type="text" placeholder="Price Open">
+                <input type="text" placeholder="Price Close">
+            </div>
+        </div>
+
+        <button class="btn-save">Log Execution</button>
     </div>
 </div>
 
 <script>
-    // Inisialisasi Grafik Chart.js
-    const ctx = document.getElementById('performanceChart').getContext('2d');
-    const performanceChart = new Chart(ctx, {
+    // Tab Logic
+    function openTab(evt, tfName) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+        document.getElementById(tfName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    // Logo Upload Logic
+    function loadLogo(event) {
+        const output = document.getElementById('logoImg');
+        const text = document.getElementById('logoText');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.style.display = 'block';
+        text.style.display = 'none';
+    }
+
+    // Chart Logic
+    const ctx = document.getElementById('mainChart').getContext('2d');
+    new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum'],
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
             datasets: [{
-                label: 'Profit/Loss ($)',
-                data: [120, 190, -50, 250, 400],
-                borderColor: '#cc0000',
-                backgroundColor: 'rgba(204, 0, 0, 0.2)',
-                borderWidth: 3,
+                label: 'Equity Curve',
+                data: [1000, 1250, 1100, 1600],
+                borderColor: '#e63946',
+                tension: 0.4,
                 fill: true,
-                tension: 0.4
+                backgroundColor: 'rgba(230, 57, 70, 0.1)',
+                pointRadius: 5,
+                pointBackgroundColor: '#e63946'
             }]
         },
         options: {
-            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
             scales: {
-                y: { beginAtZero: false, grid: { color: '#333' } },
-                x: { grid: { color: '#333' } }
-            },
-            plugins: {
-                legend: { labels: { color: 'white' } }
+                y: { grid: { color: '#2d333b' }, ticks: { color: '#94a3b8' } },
+                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
             }
         }
     });
