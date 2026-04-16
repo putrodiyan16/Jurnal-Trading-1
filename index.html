@@ -27,7 +27,6 @@
             line-height: 1.6;
         }
 
-        /* Header & Logo */
         header {
             background: linear-gradient(135deg, #1a1d23 0%, #0f1115 100%);
             padding: 30px 20px;
@@ -49,19 +48,10 @@
             overflow: hidden;
         }
 
-        .logo-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        .logo-placeholder img { width: 100%; height: 100%; object-fit: contain; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
 
-        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -74,7 +64,6 @@
         h2 { font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; }
         h2::before { content: ''; width: 4px; height: 20px; background: var(--primary-red); margin-right: 12px; border-radius: 2px; }
 
-        /* Form Styling */
         .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
         
         label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -90,9 +79,8 @@
             transition: all 0.3s ease;
         }
 
-        select:focus, input:focus { border-color: var(--primary-red); outline: none; box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2); }
+        select:focus, input:focus, textarea:focus { border-color: var(--primary-red); outline: none; box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2); }
 
-        /* Tabs System */
         .tab-container { display: flex; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
         .tab-btn {
             flex: 1;
@@ -106,10 +94,9 @@
             transition: 0.3s;
         }
         .tab-btn.active { background: var(--primary-red); color: white; }
-        .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; margin-bottom: 20px; }
         .tab-content.active { display: block; }
 
-        /* Button */
         .btn-save {
             background: linear-gradient(to right, var(--primary-red), var(--accent-red));
             color: white;
@@ -121,12 +108,10 @@
             font-size: 1rem;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
         }
 
         .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
 
-        /* Chart Canvas */
         .chart-container { position: relative; height: 300px; width: 100%; }
 
         @media (max-width: 600px) {
@@ -157,19 +142,13 @@
     <div class="card">
         <h2>New Entry</h2>
         
-        <div class="input-grid">
-            <div class="form-group">
-                <label>Instrument</label>
-                <select>
-                    <option>XAUUSD (Emas)</option>
-                    <option>XAGUSD (Perak)</option>
-                    <option>NAS100 (Nasdaq)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Notes (General)</label>
-                <input type="text" placeholder="Entry context...">
-            </div>
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label>Instrument</label>
+            <select>
+                <option>XAUUSD (Emas)</option>
+                <option>XAGUSD (Perak)</option>
+                <option>NAS100 (Nasdaq)</option>
+            </select>
         </div>
 
         <div class="tab-container">
@@ -181,58 +160,62 @@
 
         <div id="H4" class="tab-content active">
             <div class="input-grid">
-                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
-                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
-                <input type="text" placeholder="Candle Pattern">
+                <div><label>Trend MA</label><select><option>Buy</option><option>Sell</option></select></div>
+                <div><label>RSI</label><select><option>Neutral</option><option>Overbought</option><option>Oversold</option></select></div>
+                <div><label>Pola Candle</label><input type="text" placeholder="..."></div>
             </div>
             <div class="input-grid">
-                <input type="text" placeholder="Price Open">
-                <input type="text" placeholder="Price Close">
+                <div><label>Harga Open</label><input type="text" placeholder="0.0000"></div>
+                <div><label>Harga Close</label><input type="text" placeholder="0.0000"></div>
             </div>
         </div>
 
         <div id="H1" class="tab-content">
             <div class="input-grid">
-                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
-                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
-                <input type="text" placeholder="Candle Pattern">
+                <div><label>Trend MA</label><select><option>Buy</option><option>Sell</option></select></div>
+                <div><label>RSI</label><select><option>Neutral</option><option>Overbought</option><option>Oversold</option></select></div>
+                <div><label>Pola Candle</label><input type="text" placeholder="..."></div>
             </div>
             <div class="input-grid">
-                <input type="text" placeholder="Price Open">
-                <input type="text" placeholder="Price Close">
+                <div><label>Harga Open</label><input type="text" placeholder="0.0000"></div>
+                <div><label>Harga Close</label><input type="text" placeholder="0.0000"></div>
             </div>
         </div>
 
         <div id="M30" class="tab-content">
             <div class="input-grid">
-                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
-                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
-                <input type="text" placeholder="Candle Pattern">
+                <div><label>Trend MA</label><select><option>Buy</option><option>Sell</option></select></div>
+                <div><label>RSI</label><select><option>Neutral</option><option>Overbought</option><option>Oversold</option></select></div>
+                <div><label>Pola Candle</label><input type="text" placeholder="..."></div>
             </div>
             <div class="input-grid">
-                <input type="text" placeholder="Price Open">
-                <input type="text" placeholder="Price Close">
+                <div><label>Harga Open</label><input type="text" placeholder="0.0000"></div>
+                <div><label>Harga Close</label><input type="text" placeholder="0.0000"></div>
             </div>
         </div>
 
         <div id="M15" class="tab-content">
             <div class="input-grid">
-                <select><option>Trend: Buy</option><option>Trend: Sell</option></select>
-                <select><option>RSI: Neutral</option><option>RSI: Overbought</option><option>RSI: Oversold</option></select>
-                <input type="text" placeholder="Candle Pattern">
+                <div><label>Trend MA</label><select><option>Buy</option><option>Sell</option></select></div>
+                <div><label>RSI</label><select><option>Neutral</option><option>Overbought</option><option>Oversold</option></select></div>
+                <div><label>Pola Candle</label><input type="text" placeholder="..."></div>
             </div>
             <div class="input-grid">
-                <input type="text" placeholder="Price Open">
-                <input type="text" placeholder="Price Close">
+                <div><label>Harga Open</label><input type="text" placeholder="0.0000"></div>
+                <div><label>Harga Close</label><input type="text" placeholder="0.0000"></div>
             </div>
         </div>
 
-        <button class="btn-save">Log Execution</button>
+        <div class="form-group" style="margin-bottom: 25px;">
+            <label>Trading Notes & Analysis</label>
+            <textarea rows="4" placeholder="Tulis alasan entry, psikologi saat trade, atau evaluasi di sini..."></textarea>
+        </div>
+
+        <button class="btn-save">LOG EXECUTION</button>
     </div>
 </div>
 
 <script>
-    // Tab Logic
     function openTab(evt, tfName) {
         let i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-content");
@@ -243,7 +226,6 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // Logo Upload Logic
     function loadLogo(event) {
         const output = document.getElementById('logoImg');
         const text = document.getElementById('logoText');
@@ -252,20 +234,19 @@
         text.style.display = 'none';
     }
 
-    // Chart Logic
     const ctx = document.getElementById('mainChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
             datasets: [{
                 label: 'Equity Curve',
-                data: [1000, 1250, 1100, 1600],
+                data: [1000, 1150, 1080, 1400, 1550],
                 borderColor: '#e63946',
                 tension: 0.4,
                 fill: true,
                 backgroundColor: 'rgba(230, 57, 70, 0.1)',
-                pointRadius: 5,
+                pointRadius: 6,
                 pointBackgroundColor: '#e63946'
             }]
         },
