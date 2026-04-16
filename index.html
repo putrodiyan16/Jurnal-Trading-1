@@ -8,95 +8,105 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-        --primary-red: #e63946;
-        --accent-red: #b91c1c;
-        --bg-body: #0f1115;
-        --bg-card: #1a1d23;
-        --text-main: #f1f1f1;
-        --text-muted: #94a3b8;
-        --border-color: #2d333b;
-    }
+            --primary-red: #e63946;
+            --accent-red: #b91c1c;
+            --bg-body: #0f1115;
+            --bg-card: #1a1d23;
+            --text-main: #f1f1f1;
+            --text-muted: #94a3b8;
+            --border-color: #2d333b;
+        }
 
-    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    
-    body { background-color: var(--bg-body); color: var(--text-main); margin: 0; padding-bottom: 50px; line-height: 1.6; }
-    
-    header { background: linear-gradient(135deg, #1a1d23 0%, #0f1115 100%); padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-color); }
-    
-    .logo-placeholder { width: 120px; height: 50px; background: #2d333b; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px dashed var(--text-muted); cursor: pointer; overflow: hidden; }
-    .logo-placeholder img { width: 100%; height: 100%; object-fit: contain; }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { background-color: var(--bg-body); color: var(--text-main); margin: 0; padding-bottom: 50px; line-height: 1.6; }
+        
+        header { background: linear-gradient(135deg, #1a1d23 0%, #0f1115 100%); padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-color); }
+        
+        /* Gaya untuk Container Logo */
+        .logo-container {
+            max-width: 180px;
+            height: 60px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
 
-    .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        /* Gaya untuk Gambar Logo */
+        .logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Memastikan gambar proporsional di dalam kotak */
+        }
 
-    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
 
-    h2 { font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; }
-    h2::before { content: ''; width: 4px; height: 20px; background: var(--primary-red); margin-right: 12px; border-radius: 2px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 
-    /* PERBAIKAN GRID: Agar dropdown tidak keluar jalur */
-    .input-grid { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-        gap: 15px; 
-        margin-bottom: 20px;
-        width: 100%;
-    }
+        h2 { font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; }
+        h2::before { content: ''; width: 4px; height: 20px; background: var(--primary-red); margin-right: 12px; border-radius: 2px; }
 
-    label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 20px;
+            width: 100%;
+        }
 
-    /* PERBAIKAN INPUT & SELECT: Menghindari teks meluap */
-    select, input, textarea { 
-        width: 100%; 
-        background: #252930; 
-        border: 1px solid var(--border-color); 
-        color: white; 
-        padding: 12px; 
-        border-radius: 8px; 
-        font-size: 0.95rem; 
-        transition: all 0.3s ease;
-        appearance: none; /* Menghilangkan style default browser */
-        -webkit-appearance: none;
-        overflow: hidden;
-        text-overflow: ellipsis; /* Jika teks terlalu panjang akan jadi ... */
-    }
+        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* Memberi ruang sedikit untuk icon arrow dropdown */
-    select {
-        padding-right: 30px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-        background-size: 16px;
-    }
+        select, input, textarea { 
+            width: 100%; 
+            background: #252930; 
+            border: 1px solid var(--border-color); 
+            color: white; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 0.95rem; 
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    select:focus, input:focus, textarea:focus { border-color: var(--primary-red); outline: none; box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2); }
+        select {
+            padding-right: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+        }
 
-    .tab-container { display: flex; flex-wrap: wrap; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
-    
-    .tab-btn { flex: 1; min-width: 70px; padding: 10px; border: none; background: none; color: var(--text-muted); cursor: pointer; border-radius: 7px; font-weight: 600; transition: 0.3s; font-size: 0.85rem; }
-    .tab-btn.active { background: var(--primary-red); color: white; }
+        select:focus, input:focus, textarea:focus { border-color: var(--primary-red); outline: none; box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2); }
 
-    .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; }
-    .tab-content.active { display: block; }
+        .tab-container { display: flex; flex-wrap: wrap; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
+        .tab-btn { flex: 1; min-width: 70px; padding: 10px; border: none; background: none; color: var(--text-muted); cursor: pointer; border-radius: 7px; font-weight: 600; transition: 0.3s; font-size: 0.85rem; }
+        .tab-btn.active { background: var(--primary-red); color: white; }
 
-    .btn-save { background: linear-gradient(to right, var(--primary-red), var(--accent-red)); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; }
-    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
+        .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .tab-content.active { display: block; }
 
-    @media (max-width: 600px) {
-        .container { padding: 10px; }
-        .card { padding: 15px; }
-        .input-grid { grid-template-columns: 1fr; } /* Satu kolom saja jika di HP */
-    }
+        .btn-save { background: linear-gradient(to right, var(--primary-red), var(--accent-red)); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
+
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+            .card { padding: 15px; }
+            .input-grid { grid-template-columns: 1fr; }
+            .logo-container { max-width: 140px; height: 50px; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-placeholder" onclick="document.getElementById('logoInput').click()">
-        <span id="logoText">GANTI LOGO</span>
-        <img id="logoImg" style="display:none;">
+    <div class="logo-container">
+        <img src="https://via.placeholder.com/180x60/2d333b/ffffff?text=LOGO+TRADING" alt="Trading Journal Logo">
     </div>
-    <input type="file" id="logoInput" style="display:none" accept="image/*" onchange="loadLogo(event)">
 </header>
 
 <div class="container">
@@ -171,6 +181,7 @@
 </div>
 
 <script>
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
     const scriptURL = 'GANTI_DENGAN_URL_WEB_APP_KAMU';
 
     function openTab(evt, tfName) {
@@ -183,19 +194,10 @@
         evt.currentTarget.classList.add("active");
     }
 
-    function loadLogo(event) {
-        const output = document.getElementById('logoImg');
-        const text = document.getElementById('logoText');
-        output.src = URL.createObjectURL(event.target.files[0]);
-        output.style.display = 'block';
-        text.style.display = 'none';
-    }
-
     document.getElementById('saveBtn').addEventListener('click', function() {
         const btn = this;
         const journalData = {
             pair: document.getElementById('mainPair').value,
-            // Ambil data semua TF secara mendatar
             h4_trend: document.querySelector('#H4 .trend').value,
             h4_rsi: document.querySelector('#H4 .rsi').value,
             h1_trend: document.querySelector('#H1 .trend').value,
@@ -204,7 +206,6 @@
             m30_rsi: document.querySelector('#M30 .rsi').value,
             m15_trend: document.querySelector('#M15 .trend').value,
             m15_rsi: document.querySelector('#M15 .rsi').value,
-            // Data Eksekusi Terpisah
             candle: document.getElementById('mainCandle').value,
             open: document.getElementById('openPrice').value,
             close: document.getElementById('closePrice').value,
