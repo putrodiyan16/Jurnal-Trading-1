@@ -1,76 +1,77 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trading Journal</title>
-</head>
-
-<body style="background:#111;color:white;font-family:sans-serif">
-
-<h2>Trading Journal</h2>
-
-<select id="pair">
-  <option value="XAUUSD">XAUUSD</option>
-  <option value="NAS100">NAS100</option>
-</select>
-
-<br><br>
-
-<input type="number" id="open" placeholder="Open Price"><br><br>
-<input type="number" id="close" placeholder="Close Price"><br><br>
-
-<input type="text" id="candle" placeholder="Candle"><br><br>
-
-<textarea id="notes" placeholder="Notes"></textarea><br><br>
-
-<button onclick="kirimData()">Kirim</button>
-
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbzEDKyCY4jvm1p_Ae9WdwP7iegVNknuO2SUzb84lgTx0NEFq0_jf_LP2UnAke8u-MyA/exec";
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxmxtNfNvRSP9Z2m47I-KkFcDdJNt1WKeuFAQN7ThU0WehnVfiKppaAmwHO1KFanvnJ/exec';
 
-function kirimData() {
-  const open = parseFloat(document.getElementById("open").value);
-  const close = parseFloat(document.getElementById("close").value);
+    function openTab(evt, tfName) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+        document.getElementById(tfName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
 
-  if (isNaN(open) || isNaN(close)) {
-    alert("Isi harga dengan benar!");
-    return;
-  }
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        const btn = this;
 
-  const data = {
-    pair: document.getElementById("pair").value,
-    h4_trend: "Buy",
-    h4_rsi: "Neutral",
-    h1_trend: "Buy",
-    h1_rsi: "Neutral",
-    m30_trend: "Buy",
-    m30_rsi: "Neutral",
-    m15_trend: "Buy",
-    m15_rsi: "Neutral",
-    candle: document.getElementById("candle").value,
-    open: open,
-    close: close,
-    notes: document.getElementById("notes").value,
-    pips: ((close - open) * 100).toFixed(2)
-  };
+        // ✅ VALIDASI ANGKA (PERBAIKAN)
+        const openVal = parseFloat(document.getElementById('openPrice').value);
+        const closeVal = parseFloat(document.getElementById('closePrice').value);
 
-  fetch(scriptURL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  .then(res => res.text())
-  .then(res => {
-    alert("Sukses: " + res);
-  })
-  .catch(err => {
-    alert("Error: " + err);
-  });
-}
+        if (isNaN(openVal) || isNaN(closeVal)) {
+            alert("Isi harga dengan benar!");
+            return;
+        }
+
+        const journalData = {
+            pair: document.getElementById('mainPair').value,
+            h4_trend: document.querySelector('#H4 .trend').value,
+            h4_rsi: document.querySelector('#H4 .rsi').value,
+            h1_trend: document.querySelector('#H1 .trend').value,
+            h1_rsi: document.querySelector('#H1 .rsi').value,
+            m30_trend: document.querySelector('#M30 .trend').value,
+            m30_rsi: document.querySelector('#M30 .rsi').value,
+            m15_trend: document.querySelector('#M15 .trend').value,
+            m15_rsi: document.querySelector('#M15 .rsi').value,
+            candle: document.getElementById('mainCandle').value,
+
+            // ✅ KIRIM ANGKA (PERBAIKAN)
+            open: openVal,
+            close: closeVal,
+
+            notes: document.getElementById('mainNotes').value,
+
+            // ✅ TAMBAH PIPS
+            pips: ((closeVal - openVal) * 100).toFixed(2)
+        };
+
+        if(scriptURL === 'GANTI_DENGAN_URL_WEB_APP_KAMU') { 
+            alert('URL Script Belum Diisi!'); 
+            return; 
+        }
+
+        btn.disabled = true;
+        btn.innerText = 'Syncing...';
+
+        // ✅ FETCH SUDAH DIPERBAIKI (TANPA no-cors)
+        fetch(scriptURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(journalData)
+        })
+        .then(res => res.text())
+        .then(res => { 
+            alert('Data Tersimpan! ' + res); 
+            btn.disabled = false; 
+            btn.innerText = 'Log Execution'; 
+        })
+        .catch(err => { 
+            alert('Gagal! ' + err); 
+            btn.disabled = false; 
+            btn.innerText = 'Log Execution';
+        });
+    });
 </script>
-
-</body>
-</html>
