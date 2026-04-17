@@ -1,77 +1,96 @@
 <script>
-    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxmxtNfNvRSP9Z2m47I-KkFcDdJNt1WKeuFAQN7ThU0WehnVfiKppaAmwHO1KFanvnJ/exec';
 
     function openTab(evt, tfName) {
         let i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-content");
-        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].classList.remove("active");
+        }
         tablinks = document.getElementsByClassName("tab-btn");
-        for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
         document.getElementById(tfName).classList.add("active");
         evt.currentTarget.classList.add("active");
     }
 
-    document.getElementById('saveBtn').addEventListener('click', function() {
+    document.getElementById('saveBtn').addEventListener('click', async function () {
         const btn = this;
 
-        // ✅ VALIDASI ANGKA (PERBAIKAN)
-        const openVal = parseFloat(document.getElementById('openPrice').value);
-        const closeVal = parseFloat(document.getElementById('closePrice').value);
+        try {
+            // ✅ VALIDASI ANGKA
+            const openVal = parseFloat(document.getElementById('openPrice').value);
+            const closeVal = parseFloat(document.getElementById('closePrice').value);
 
-        if (isNaN(openVal) || isNaN(closeVal)) {
-            alert("Isi harga dengan benar!");
-            return;
-        }
+            if (isNaN(openVal) || isNaN(closeVal)) {
+                alert("Isi harga dengan benar!");
+                return;
+            }
 
-        const journalData = {
-            pair: document.getElementById('mainPair').value,
-            h4_trend: document.querySelector('#H4 .trend').value,
-            h4_rsi: document.querySelector('#H4 .rsi').value,
-            h1_trend: document.querySelector('#H1 .trend').value,
-            h1_rsi: document.querySelector('#H1 .rsi').value,
-            m30_trend: document.querySelector('#M30 .trend').value,
-            m30_rsi: document.querySelector('#M30 .rsi').value,
-            m15_trend: document.querySelector('#M15 .trend').value,
-            m15_rsi: document.querySelector('#M15 .rsi').value,
-            candle: document.getElementById('mainCandle').value,
+            const journalData = {
+                pair: document.getElementById('mainPair').value,
+                h4_trend: document.querySelector('#H4 .trend').value,
+                h4_rsi: document.querySelector('#H4 .rsi').value,
+                h1_trend: document.querySelector('#H1 .trend').value,
+                h1_rsi: document.querySelector('#H1 .rsi').value,
+                m30_trend: document.querySelector('#M30 .trend').value,
+                m30_rsi: document.querySelector('#M30 .rsi').value,
+                m15_trend: document.querySelector('#M15 .trend').value,
+                m15_rsi: document.querySelector('#M15 .rsi').value,
+                candle: document.getElementById('mainCandle').value,
+                open: openVal,
+                close: closeVal,
+                notes: document.getElementById('mainNotes').value,
+                pips: ((closeVal - openVal) * 100).toFixed(2)
+            };
 
-            // ✅ KIRIM ANGKA (PERBAIKAN)
-            open: openVal,
-            close: closeVal,
+            if (!scriptURL || scriptURL.includes("GANTI")) {
+                alert('URL Script belum valid!');
+                return;
+            }
 
-            notes: document.getElementById('mainNotes').value,
+            // ✅ DISABLE BUTTON
+            btn.disabled = true;
+            btn.innerText = 'Syncing...';
 
-            // ✅ TAMBAH PIPS
-            pips: ((closeVal - openVal) * 100).toFixed(2)
-        };
+            // ✅ TIMEOUT PROTECTION
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000); // 10 detik
 
-        if(scriptURL === 'GANTI_DENGAN_URL_WEB_APP_KAMU') { 
-            alert('URL Script Belum Diisi!'); 
-            return; 
-        }
+            const response = await fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(journalData),
+                signal: controller.signal
+            });
 
-        btn.disabled = true;
-        btn.innerText = 'Syncing...';
+            clearTimeout(timeout);
 
-        // ✅ FETCH SUDAH DIPERBAIKI (TANPA no-cors)
-        fetch(scriptURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(journalData)
-        })
-        .then(res => res.text())
-        .then(res => { 
-            alert('Data Tersimpan! ' + res); 
-            btn.disabled = false; 
-            btn.innerText = 'Log Execution'; 
-        })
-        .catch(err => { 
-            alert('Gagal! ' + err); 
-            btn.disabled = false; 
+            const text = await response.text();
+
+            // ✅ RESPONSE CHECK
+            if (response.ok) {
+                alert('Data Tersimpan! ' + text);
+            } else {
+                throw new Error('Server error: ' + text);
+            }
+
+        } catch (err) {
+            console.error("ERROR:", err);
+
+            if (err.name === 'AbortError') {
+                alert('Request timeout (koneksi lambat / server tidak respon)');
+            } else {
+                alert('Gagal kirim data: ' + err.message);
+            }
+
+        } finally {
+            // ✅ SELALU BALIK NORMAL
+            btn.disabled = false;
             btn.innerText = 'Log Execution';
-        });
+        }
     });
 </script>
