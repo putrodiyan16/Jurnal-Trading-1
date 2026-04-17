@@ -21,31 +21,31 @@
         
         body { background-color: var(--bg-body); color: var(--text-main); margin: 0; padding-bottom: 50px; line-height: 1.6; }
         
-        background: #000000; /* Ini akan membuat background menjadi hitam pekat */
-    padding: 30px 20px; 
-    text-align: center; 
-    border-bottom: 1px solid var(--border-color);
+        /* PERBAIKAN DI SINI: Membungkus kode background dengan selector header */
+        header {
+            background: #000000; 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid var(--border-color);
+        }
         
-        /* Gaya untuk Container Logo */
         .logo-container {
             max-width: 180px;
             height: 60px;
-            margin: 0 auto 15px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
 
-        /* Gaya untuk Gambar Logo */
         .logo-container img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain; /* Memastikan gambar proporsional di dalam kotak */
+            object-fit: contain;
         }
 
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-
         .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 
         h2 { font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; }
@@ -72,8 +72,6 @@
             transition: all 0.3s ease;
             appearance: none;
             -webkit-appearance: none;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         select {
@@ -83,8 +81,6 @@
             background-position: right 10px center;
             background-size: 16px;
         }
-
-        select:focus, input:focus, textarea:focus { border-color: var(--primary-red); outline: none; box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2); }
 
         .tab-container { display: flex; flex-wrap: wrap; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
         .tab-btn { flex: 1; min-width: 70px; padding: 10px; border: none; background: none; color: var(--text-muted); cursor: pointer; border-radius: 7px; font-weight: 600; transition: 0.3s; font-size: 0.85rem; }
@@ -97,10 +93,7 @@
         .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
 
         @media (max-width: 600px) {
-            .container { padding: 10px; }
-            .card { padding: 15px; }
             .input-grid { grid-template-columns: 1fr; }
-            .logo-container { max-width: 140px; height: 50px; }
         }
     </style>
 </head>
@@ -184,7 +177,6 @@
 </div>
 
 <script>
-    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxmxtNfNvRSP9Z2m47I-KkFcDdJNt1WKeuFAQN7ThU0WehnVfiKppaAmwHO1KFanvnJ/exec';
 
     function openTab(evt, tfName) {
@@ -215,14 +207,27 @@
             notes: document.getElementById('mainNotes').value
         };
 
-        if(scriptURL === 'GANTI_DENGAN_URL_WEB_APP_KAMU') { alert('URL Script Belum Diisi!'); return; }
-
         btn.disabled = true;
         btn.innerText = 'Syncing...';
 
-        fetch(scriptURL, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(journalData) })
-        .then(() => { alert('Data Tersimpan!'); btn.disabled = false; btn.innerText = 'Log Execution'; })
-        .catch(() => { alert('Gagal!'); btn.disabled = false; });
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            cache: 'no-cache', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify(journalData) 
+        })
+        .then(() => { 
+            alert('Data Tersimpan!'); 
+            btn.disabled = false; 
+            btn.innerText = 'Log Execution'; 
+        })
+        .catch((error) => { 
+            console.error('Error:', error);
+            alert('Gagal mengirim data!'); 
+            btn.disabled = false; 
+            btn.innerText = 'Log Execution';
+        });
     });
 </script>
 </body>
