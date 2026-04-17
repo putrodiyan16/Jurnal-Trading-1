@@ -1,24 +1,146 @@
-document.getElementById('saveBtn').addEventListener('click', function() {
-        const btn = this;
-        
-        // Ambil nilai open dan close
-        const openVal = document.getElementById('openPrice').value;
-        const closeVal = document.getElementById('closePrice').value;
-        const pair = document.getElementById('mainPair').value;
-
-        // Validasi input harga agar tidak kosong
-        if (!openVal || !closeVal) {
-            alert("Harap isi Price Open dan Price Close!");
-            return;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Journal | Professional Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e63946;
+            --accent-red: #b91c1c;
+            --bg-body: #0f1115;
+            --bg-card: #1a1d23;
+            --text-main: #f1f1f1;
+            --text-muted: #94a3b8;
+            --border-color: #2d333b;
         }
 
-        const openPrice = parseFloat(openVal);
-        const closePrice = parseFloat(closeVal);
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); margin: 0; padding-bottom: 50px; }
         
-        // Perhitungan Pips Otomatis
-        // Jika XAUUSD, selisih dikali 100. Selain itu dikali 1 (bisa kamu sesuaikan nanti)
-        let pengali = (pair === "XAUUSD") ? 100 : 100; 
-        const hitungPips = ((closePrice - openPrice) * pengali).toFixed(2); 
+        /* Header Hitam Pekat */
+        header { 
+            background: #000000; 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid var(--border-color); 
+        }
+
+        .logo-container {
+            max-width: 180px;
+            height: 60px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+
+        h2 { font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; }
+        h2::before { content: ''; width: 4px; height: 20px; background: var(--primary-red); margin-right: 12px; border-radius: 2px; }
+
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; }
+
+        select, input, textarea { 
+            width: 100%; background: #252930; border: 1px solid var(--border-color); 
+            color: white; padding: 12px; border-radius: 8px; font-size: 0.95rem; 
+        }
+
+        .tab-container { display: flex; flex-wrap: wrap; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: none; color: var(--text-muted); cursor: pointer; border-radius: 7px; font-weight: 600; }
+        .tab-btn.active { background: var(--primary-red); color: white; }
+
+        .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .tab-content.active { display: block; }
+
+        .btn-save { 
+            background: linear-gradient(to right, var(--primary-red), var(--accent-red)); 
+            color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; 
+            font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 20px; 
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-container">
+        <img src="https://drive.google.com/thumbnail?id=1L4arpIfPDUDqvLRVG_fvH-5OVHx4OBOu&sz=w500" alt="Logo">
+    </div>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Analysis</h2>
+        <div class="input-grid">
+            <div class="form-group">
+                <label>Instrument</label>
+                <select id="mainPair">
+                    <option value="XAUUSD">XAUUSD (Emas)</option>
+                    <option value="NAS100">NAS100</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="openTab(event, 'H4')">H4</button>
+            <button class="tab-btn" onclick="openTab(event, 'H1')">H1</button>
+            <button class="tab-btn" onclick="openTab(event, 'M30')">M30</button>
+            <button class="tab-btn" onclick="openTab(event, 'M15')">M15</button>
+        </div>
+
+        <div id="H4" class="tab-content active"><div class="input-grid"><select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select><select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">Overbought</option><option value="Oversold">Oversold</option></select></div></div>
+        <div id="H1" class="tab-content"><div class="input-grid"><select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select><select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">Overbought</option><option value="Oversold">Oversold</option></select></div></div>
+        <div id="M30" class="tab-content"><div class="input-grid"><select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select><select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">Overbought</option><option value="Oversold">Oversold</option></select></div></div>
+        <div id="M15" class="tab-content"><div class="input-grid"><select class="trend"><option value="Buy">Trend: Buy</option><option value="Sell">Trend: Sell</option></select><select class="rsi"><option value="Neutral">RSI: Neutral</option><option value="Overbought">Overbought</option><option value="Oversold">Oversold</option></select></div></div>
+    </div>
+
+    <div class="card">
+        <h2>Execution</h2>
+        <div class="input-grid">
+            <div><label>Candle</label><input type="text" id="mainCandle"></div>
+            <div><label>Open</label><input type="number" id="openPrice" step="any"></div>
+            <div><label>Close</label><input type="number" id="closePrice" step="any"></div>
+        </div>
+        <label>Notes</label>
+        <textarea id="mainNotes" rows="3"></textarea>
+        <button id="saveBtn" class="btn-save">Log Execution</button>
+    </div>
+</div>
+
+<script>
+    // GANTI DENGAN URL WEB APP KAMU
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzzZY2kLhoFyClwBYz3-eoUNcnLHUH_D4OgCVF5F68guKT8hmBVD69xsMdH8KF_YK9w/exec';
+
+    function openTab(evt, tf) {
+        let i, content, links;
+        content = document.getElementsByClassName("tab-content");
+        for (i = 0; i < content.length; i++) content[i].classList.remove("active");
+        links = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < links.length; i++) links[i].classList.remove("active");
+        document.getElementById(tf).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        const btn = this;
+        const openVal = parseFloat(document.getElementById('openPrice').value);
+        const closeVal = parseFloat(document.getElementById('closePrice').value);
+        const pair = document.getElementById('mainPair').value;
+
+        if (!openVal || !closeVal) { alert("Isi harga dulu!"); return; }
+
+        // Hitung Pips (XAUUSD biasanya selisih dikali 100)
+        const hitungPips = ((closeVal - openVal) * 100).toFixed(2);
 
         const journalData = {
             pair: pair,
@@ -31,33 +153,23 @@ document.getElementById('saveBtn').addEventListener('click', function() {
             m15_trend: document.querySelector('#M15 .trend').value,
             m15_rsi: document.querySelector('#M15 .rsi').value,
             candle: document.getElementById('mainCandle').value,
-            open: openPrice,
-            close: closePrice,
+            open: openVal,
+            close: closeVal,
             notes: document.getElementById('mainNotes').value,
-            pips: hitungPips // Data ini akan masuk ke kolom O
+            pips: hitungPips
         };
 
         btn.disabled = true;
         btn.innerText = 'Syncing...';
 
-        fetch(scriptURL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify(journalData) 
-        })
+        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(journalData) })
         .then(() => { 
-            alert('Data Berhasil Dicatat ke Kolom O!'); 
+            alert('Berhasil! Data masuk ke kolom O.'); 
             btn.disabled = false; 
             btn.innerText = 'Log Execution';
-            // Opsional: Kosongkan form setelah simpan
-            document.getElementById('mainNotes').value = "";
         })
-        .catch((error) => { 
-            console.error('Error:', error);
-            alert('Gagal mengirim data!'); 
-            btn.disabled = false; 
-            btn.innerText = 'Log Execution';
-        });
+        .catch(() => { alert('Gagal!'); btn.disabled = false; });
     });
+</script>
+</body>
+</html>
