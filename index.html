@@ -181,8 +181,8 @@
 </div>
 
 <script>
-    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwJTPFVTUDqtpPjJWdwDgERbvb7F_v-7yB8drBitI88LVM-stzDtghN1LTroPkoR-UeKQ/exec';
+    // MASUKKAN URL WEB APP ANDA DI SINI
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzpoLCP8k8-Fv1dLE-e43cfFaAW01r9XjqIUZFvNeNJ9gjm4hEsnfxlZBGpb34dI8iXbw/exec';
 
     function openTab(evt, tfName) {
         let i, tabcontent, tablinks;
@@ -196,30 +196,44 @@
 
     document.getElementById('saveBtn').addEventListener('click', function() {
         const btn = this;
-        const journalData = {
-            pair: document.getElementById('mainPair').value,
-            h4_trend: document.querySelector('#H4 .trend').value,
-            h4_rsi: document.querySelector('#H4 .rsi').value,
-            h1_trend: document.querySelector('#H1 .trend').value,
-            h1_rsi: document.querySelector('#H1 .rsi').value,
-            m30_trend: document.querySelector('#M30 .trend').value,
-            m30_rsi: document.querySelector('#M30 .rsi').value,
-            m15_trend: document.querySelector('#M15 .trend').value,
-            m15_rsi: document.querySelector('#M15 .rsi').value,
-            candle: document.getElementById('mainCandle').value,
-            open: document.getElementById('openPrice').value,
-            close: document.getElementById('closePrice').value,
-            notes: document.getElementById('mainNotes').value
-        };
-
-        if(scriptURL === 'GANTI_DENGAN_URL_WEB_APP_KAMU') { alert('URL Script Belum Diisi!'); return; }
+        
+        // Menyiapkan data untuk dikirim
+        const params = new URLSearchParams();
+        params.append('pair', document.getElementById('mainPair').value);
+        params.append('h4_trend', document.querySelector('#H4 .trend').value);
+        params.append('h4_rsi', document.querySelector('#H4 .rsi').value);
+        params.append('h1_trend', document.querySelector('#H1 .trend').value);
+        params.append('h1_rsi', document.querySelector('#H1 .rsi').value);
+        params.append('m30_trend', document.querySelector('#M30 .trend').value);
+        params.append('m30_rsi', document.querySelector('#M30 .rsi').value);
+        params.append('m15_trend', document.querySelector('#M15 .trend').value);
+        params.append('m15_rsi', document.querySelector('#M15 .rsi').value);
+        params.append('candle', document.getElementById('mainCandle').value);
+        params.append('open', document.getElementById('openPrice').value);
+        params.append('close', document.getElementById('closePrice').value);
+        params.append('notes', document.getElementById('mainNotes').value);
 
         btn.disabled = true;
         btn.innerText = 'Syncing...';
 
-        fetch(scriptURL, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(journalData) })
-        .then(() => { alert('Data Tersimpan!'); btn.disabled = false; btn.innerText = 'Log Execution'; })
-        .catch(() => { alert('Gagal!'); btn.disabled = false; });
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            body: params 
+        })
+        .then(() => { 
+            alert('Data Berhasil Dicatat ke Sheets!'); 
+            btn.disabled = false; 
+            btn.innerText = 'Log Execution';
+            // Bersihkan inputan setelah sukses
+            document.getElementById('mainNotes').value = "";
+        })
+        .catch(error => { 
+            alert('Gagal mengirim data!'); 
+            console.error('Error!', error.message);
+            btn.disabled = false;
+            btn.innerText = 'Log Execution';
+        });
     });
 </script>
 </body>
