@@ -1,198 +1,27 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Journal | Professional Suite</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-red: #e63946;
-            --accent-red: #b91c1c;
-            --bg-body: #0f1115;
-            --bg-card: #1a1d23;
-            --text-main: #f1f1f1;
-            --text-muted: #94a3b8;
-            --border-color: #2d333b;
-        }
-
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        
-        body { background-color: var(--bg-body); color: var(--text-main); margin: 0; padding-bottom: 50px; line-height: 1.6; }
-        
-        /* PERBAIKAN DI SINI: Membungkus kode background dengan selector header */
-        header {
-            background: #000000; 
-            padding: 30px 20px; 
-            text-align: center; 
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .logo-container {
-            max-width: 180px;
-            height: 60px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .logo-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-
-        h2 { font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; }
-        h2::before { content: ''; width: 4px; height: 20px; background: var(--primary-red); margin-right: 12px; border-radius: 2px; }
-
-        .input-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            gap: 15px; 
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        select, input, textarea { 
-            width: 100%; 
-            background: #252930; 
-            border: 1px solid var(--border-color); 
-            color: white; 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-size: 0.95rem; 
-            transition: all 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        select {
-            padding-right: 30px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 16px;
-        }
-
-        .tab-container { display: flex; flex-wrap: wrap; background: #252930; border-radius: 10px; padding: 5px; margin-bottom: 20px; gap: 5px; }
-        .tab-btn { flex: 1; min-width: 70px; padding: 10px; border: none; background: none; color: var(--text-muted); cursor: pointer; border-radius: 7px; font-weight: 600; transition: 0.3s; font-size: 0.85rem; }
-        .tab-btn.active { background: var(--primary-red); color: white; }
-
-        .tab-content { display: none; border-top: 1px solid var(--border-color); padding-top: 20px; }
-        .tab-content.active { display: block; }
-
-        .btn-save { background: linear-gradient(to right, var(--primary-red), var(--accent-red)); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; }
-        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
-
-        @media (max-width: 600px) {
-            .input-grid { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="logo-container">
-        <img src="https://drive.google.com/thumbnail?id=1L4arpIfPDUDqvLRVG_fvH-5OVHx4OBOu&sz=w500" alt="Trading Journal Logo">
-    </div>
-</header>
-
-<div class="container">
-    <div class="card">
-        <h2>Multi-Timeframe Analysis</h2>
-        <div class="input-grid">
-            <div class="form-group">
-                <label>Instrument</label>
-                <select id="mainPair">
-                    <option value="XAUUSD">XAUUSD (Emas)</option>
-                    <option value="XAGUSD">XAGUSD (Perak)</option>
-                    <option value="NAS100">NAS100 (Nasdaq)</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="tab-container">
-            <button class="tab-btn active" onclick="openTab(event, 'H4')">H4 Analysis</button>
-            <button class="tab-btn" onclick="openTab(event, 'H1')">H1 Analysis</button>
-            <button class="tab-btn" onclick="openTab(event, 'M30')">M30 Analysis</button>
-            <button class="tab-btn" onclick="openTab(event, 'M15')">M15 Analysis</button>
-        </div>
-
-        <div id="H4" class="tab-content active">
-            <div class="input-grid">
-                <select class="trend"><option value="Buy">H4 Trend: Buy</option><option value="Sell">H4 Trend: Sell</option></select>
-                <select class="rsi"><option value="Neutral">H4 RSI: Neutral</option><option value="Overbought">H4 RSI: Overbought</option><option value="Oversold">H4 RSI: Oversold</option></select>
-            </div>
-        </div>
-        <div id="H1" class="tab-content">
-            <div class="input-grid">
-                <select class="trend"><option value="Buy">H1 Trend: Buy</option><option value="Sell">H1 Trend: Sell</option></select>
-                <select class="rsi"><option value="Neutral">H1 RSI: Neutral</option><option value="Overbought">H1 RSI: Overbought</option><option value="Oversold">H1 RSI: Oversold</option></select>
-            </div>
-        </div>
-        <div id="M30" class="tab-content">
-            <div class="input-grid">
-                <select class="trend"><option value="Buy">M30 Trend: Buy</option><option value="Sell">M30 Trend: Sell</option></select>
-                <select class="rsi"><option value="Neutral">M30 RSI: Neutral</option><option value="Overbought">M30 RSI: Overbought</option><option value="Oversold">M30 RSI: Oversold</option></select>
-            </div>
-        </div>
-        <div id="M15" class="tab-content">
-            <div class="input-grid">
-                <select class="trend"><option value="Buy">M15 Trend: Buy</option><option value="Sell">M15 Trend: Sell</option></select>
-                <select class="rsi"><option value="Neutral">M15 RSI: Neutral</option><option value="Overbought">M15 RSI: Overbought</option><option value="Oversold">M15 RSI: Oversold</option></select>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>Execution Details</h2>
-        <div class="input-grid">
-            <div class="form-group">
-                <label>Candle Pattern</label>
-                <input type="text" id="mainCandle" placeholder="Contoh: Pinbar / Engulfing">
-            </div>
-            <div class="form-group">
-                <label>Price Open</label>
-                <input type="text" id="openPrice" placeholder="0.0000">
-            </div>
-            <div class="form-group">
-                <label>Price Close</label>
-                <input type="text" id="closePrice" placeholder="0.0000">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Notes & Evaluation</label>
-            <textarea id="mainNotes" rows="4" placeholder="Alasan entry dan psikologi..."></textarea>
-        </div>
-        <button id="saveBtn" class="btn-save">Log Execution</button>
-    </div>
-</div>
-
-<script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwJ6nO632IGvtA6eRh-3g2i_Hjtpo6cHxD78kTGDX17F_D9NjXBg-6Wj0YYYpkZjQAV/exec';
-
-    function openTab(evt, tfName) {
-        let i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tab-content");
-        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
-        tablinks = document.getElementsByClassName("tab-btn");
-        for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
-        document.getElementById(tfName).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    }
-
-    document.getElementById('saveBtn').addEventListener('click', function() {
+document.getElementById('saveBtn').addEventListener('click', function() {
         const btn = this;
+        
+        // Ambil nilai open dan close
+        const openVal = document.getElementById('openPrice').value;
+        const closeVal = document.getElementById('closePrice').value;
+        const pair = document.getElementById('mainPair').value;
+
+        // Validasi input harga agar tidak kosong
+        if (!openVal || !closeVal) {
+            alert("Harap isi Price Open dan Price Close!");
+            return;
+        }
+
+        const openPrice = parseFloat(openVal);
+        const closePrice = parseFloat(closeVal);
+        
+        // Perhitungan Pips Otomatis
+        // Jika XAUUSD, selisih dikali 100. Selain itu dikali 1 (bisa kamu sesuaikan nanti)
+        let pengali = (pair === "XAUUSD") ? 100 : 100; 
+        const hitungPips = ((closePrice - openPrice) * pengali).toFixed(2); 
+
         const journalData = {
-            pair: document.getElementById('mainPair').value,
+            pair: pair,
             h4_trend: document.querySelector('#H4 .trend').value,
             h4_rsi: document.querySelector('#H4 .rsi').value,
             h1_trend: document.querySelector('#H1 .trend').value,
@@ -202,9 +31,10 @@
             m15_trend: document.querySelector('#M15 .trend').value,
             m15_rsi: document.querySelector('#M15 .rsi').value,
             candle: document.getElementById('mainCandle').value,
-            open: document.getElementById('openPrice').value,
-            close: document.getElementById('closePrice').value,
-            notes: document.getElementById('mainNotes').value
+            open: openPrice,
+            close: closePrice,
+            notes: document.getElementById('mainNotes').value,
+            pips: hitungPips // Data ini akan masuk ke kolom O
         };
 
         btn.disabled = true;
@@ -213,14 +43,16 @@
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors', 
-            cache: 'no-cache', 
+            cache: 'no-cache',
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify(journalData) 
         })
         .then(() => { 
-            alert('Data Tersimpan!'); 
+            alert('Data Berhasil Dicatat ke Kolom O!'); 
             btn.disabled = false; 
-            btn.innerText = 'Log Execution'; 
+            btn.innerText = 'Log Execution';
+            // Opsional: Kosongkan form setelah simpan
+            document.getElementById('mainNotes').value = "";
         })
         .catch((error) => { 
             console.error('Error:', error);
@@ -229,6 +61,3 @@
             btn.innerText = 'Log Execution';
         });
     });
-</script>
-</body>
-</html>
